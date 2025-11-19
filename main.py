@@ -23,7 +23,20 @@ def is_diagonally_dominant(A: np.ndarray | sp.sparse.csc_array) -> bool | None:
             w przeciwnym wypadku `False`.
         Jeżeli dane wejściowe są niepoprawne funkcja zwraca `None`.
     """
-    pass
+    if not isinstance(A, np.ndarray | sp.sparse.csc_array):
+        return None
+    if A.ndim != 2:
+        return None
+    if A.shape[0] != A.shape[1]:
+        return None
+    abs_A = np.abs(A)
+    diagonal = np.diag(abs_A)
+    sum_rows = np.sum(abs_A, axis=1)
+    sum_without_diag = sum_rows - diagonal
+    if all(diagonal) > all(sum_without_diag):
+        return True
+    else:
+        return False
 
 
 def residual_norm(A: np.ndarray, x: np.ndarray, b: np.ndarray) -> float | None:
